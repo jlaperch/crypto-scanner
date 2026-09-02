@@ -42,13 +42,13 @@ UNIVERSE = [
     # Financials
     "BAC", "WFC", "SCHW", "USB", "KEY", "RF", "HBAN", "SOFI",
     # Energy
-    "MRO", "DVN", "APA", "HAL", "BKR", "KMI", "CHK",
+    "OXY", "DVN", "APA", "HAL", "BKR", "KMI", "EQT",
     # Healthcare / pharma
     "PFE", "VTRS", "TEVA", "OGN", "BAX",
     # Consumer / retail
-    "F", "GM", "KSS", "M", "GPS", "BBWI", "DKS", "CPB", "KHC",
+    "F", "GM", "KSS", "M", "GAP", "BBWI", "DKS", "CPB", "KHC",
     # Industrials / materials
-    "CLF", "X", "AA", "FCX", "NEM", "DAL", "AAL", "UAL",
+    "CLF", "CCL", "AA", "FCX", "NEM", "DAL", "AAL", "UAL",
     # Comms / media
     "T", "WBD", "PARA", "SIRI",
 ]
@@ -112,18 +112,19 @@ def build_trades(df, tickers):
         d["stop_level"] = d["entry"] * (1 - STOP_PCT)
         d["gapped_through_stop"] = d["exit"] < d["stop_level"]
 
+        d = d.reset_index()
+        d.rename(columns={d.columns[0]: "date"}, inplace=True)
         rows.append(
             d[[
-                "ticker", "entry", "exit", "overnight_ret", "intraday_ret",
-                "stop_level", "gapped_through_stop", "avg_vol",
-            ]].reset_index()
+                "date", "ticker", "entry", "exit", "overnight_ret",
+                "intraday_ret", "stop_level", "gapped_through_stop", "avg_vol",
+            ]]
         )
 
     if not rows:
         sys.exit("Nothing passed the screen. Loosen the filters.")
 
     trades = pd.concat(rows, ignore_index=True)
-    trades.rename(columns={trades.columns[1]: "date"}, inplace=True)
     trades["date"] = pd.to_datetime(trades["date"])
     trades["year"] = trades["date"].dt.year
     return trades.sort_values("date").reset_index(drop=True)
