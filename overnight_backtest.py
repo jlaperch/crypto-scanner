@@ -194,6 +194,16 @@ def report_stocks():
     print(f"  Avg intraday  (open->close): {trades['intraday_ret'].mean()*10_000:+.2f} bps")
     print("  If overnight is positive and intraday is flat or negative, the edge is real-ish.")
 
+    print("\nCOST SENSITIVITY -- the number that actually decides this")
+    gross = trades["overnight_ret"].mean() * 10_000
+    for cost_bps in (0, 2, 4, 6, 8, 10):
+        net = trades["overnight_ret"] - cost_bps / 10_000
+        curve_n = (1 + net.groupby(trades["date"]).mean()).cumprod()
+        print(f"  round-trip cost {cost_bps:>2} bps -> net {net.mean()*10_000:+6.2f} bps/night, "
+              f"compounded {curve_n.iloc[-1]-1:+8.2%}, win rate {(net>0).mean():.1%}")
+    print(f"\n  Breakeven round-trip cost: {gross:.2f} bps. Above that, the strategy loses money.")
+    print("  MOC-to-MOO on $10-100 names realistically runs 4-10 bps. Judge accordingly.")
+
     trades.to_csv("overnight_trades.csv", index=False)
     by_year.to_csv("overnight_by_year.csv")
     print("\nWrote overnight_trades.csv and overnight_by_year.csv")
@@ -213,6 +223,10 @@ def report_crypto(tickers=CRYPTO):
         if d.empty:
             print(f"  {sym}: no data")
             continue
+
+        # yfinance returns MultiIndex columns even for a single ticker
+        if isinstance(d.columns, pd.MultiIndex):
+            d.columns = d.columns.get_level_values(0)
 
         d = d.tz_convert("America/New_York") if d.index.tz else d.tz_localize("UTC").tz_convert("America/New_York")
         d["hour"] = d.index.hour
