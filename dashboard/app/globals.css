@@ -1,0 +1,263 @@
+:root {
+  color-scheme: light;
+
+  --surface-1: #fcfcfb;
+  --page: #f9f9f7;
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #898781;
+  --grid: #e1e0d9;
+  --axis: #c3c2b7;
+  --border: rgba(11, 11, 11, 0.1);
+
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+
+  /* diverging pair for signed bars: blue positive, red negative */
+  --dv-pos: #2a78d6;
+  --dv-neg: #e34948;
+
+  --good: #0ca30c;
+  --warning: #fab219;
+  --serious: #ec835a;
+  --critical: #d03b3b;
+
+  --radius: 10px;
+  --font: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --surface-1: #1a1a19;
+    --page: #0d0d0d;
+    --text-primary: #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted: #898781;
+    --grid: #2c2c2a;
+    --axis: #383835;
+    --border: rgba(255, 255, 255, 0.1);
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --dv-pos: #3987e5;
+    --dv-neg: #e66767;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface-1: #1a1a19;
+  --page: #0d0d0d;
+  --text-primary: #ffffff;
+  --text-secondary: #c3c2b7;
+  --text-muted: #898781;
+  --grid: #2c2c2a;
+  --axis: #383835;
+  --border: rgba(255, 255, 255, 0.1);
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --dv-pos: #3987e5;
+  --dv-neg: #e66767;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--page);
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--series-1); }
+
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 28px 20px 96px;
+}
+
+/* ---------------- nav ---------------- */
+
+.nav {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 14px;
+  margin-bottom: 26px;
+}
+.nav h1 {
+  font-size: 17px;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.nav .links { display: flex; gap: 14px; margin-left: auto; }
+.nav a {
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 14px;
+  padding: 3px 9px;
+  border-radius: 6px;
+}
+.nav a.on { background: var(--surface-1); color: var(--text-primary); border: 1px solid var(--border); }
+
+/* ---------------- verdict ---------------- */
+
+.verdict {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--critical);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  margin-bottom: 22px;
+}
+.verdict.pass { border-left-color: var(--good); }
+.verdict .tag {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.verdict h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+.verdict p { margin: 0; color: var(--text-secondary); max-width: 68ch; }
+
+/* ---------------- tiles ---------------- */
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(178px, 1fr));
+  gap: 12px;
+  margin-bottom: 30px;
+}
+.tile {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+.tile .k {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 5px;
+}
+.tile .v {
+  font-size: 27px;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+.tile .sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+.pos { color: var(--good); }
+.neg { color: var(--critical); }
+
+/* ---------------- sections ---------------- */
+
+section { margin-bottom: 38px; }
+section > h3 {
+  font-size: 16px;
+  margin: 0 0 4px;
+  letter-spacing: -0.01em;
+}
+section > .lede {
+  margin: 0 0 14px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  max-width: 72ch;
+}
+
+.card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 16px 8px;
+}
+.card.flush { padding-bottom: 16px; }
+
+.legend {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0 0 10px 2px;
+}
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.swatch { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+
+/* ---------------- table ---------------- */
+
+.scroll { overflow-x: auto; }
+.card.flush .scroll table { font-size: 13px; }
+.card.flush .scroll th,
+.card.flush .scroll td { padding: 6px 7px; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  font-variant-numeric: tabular-nums;
+}
+th, td {
+  text-align: right;
+  padding: 7px 10px;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--grid);
+}
+th {
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  user-select: none;
+}
+th:first-child, td:first-child { text-align: left; }
+tbody tr:hover { background: var(--page); }
+tbody tr:last-child td { border-bottom: none; }
+
+.pill {
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+.pill.qualified { border-color: var(--good); color: var(--good); }
+.pill.watch { border-color: var(--warning); }
+.pill.interesting { border-color: var(--serious); }
+
+/* ---------------- notes ---------------- */
+
+ul.notes { margin: 0; padding-left: 20px; color: var(--text-secondary); }
+ul.notes li { margin-bottom: 6px; }
+
+.foot {
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.tooltip {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 11px;
+  font-size: 13px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.11);
+}
+.tooltip .t-lab { color: var(--text-secondary); margin-bottom: 4px; font-size: 12px; }
+.tooltip .t-row { display: flex; gap: 12px; justify-content: space-between; }
+.tooltip .t-row b { font-variant-numeric: tabular-nums; font-weight: 600; }
