@@ -19,7 +19,7 @@ plugs in later.
 ## Refreshing the numbers
 
 ```bash
-cd ~/overnight
+cd ~/Documents/538/_personal/code/crypto-scanner
 source .venv/bin/activate
 python overnight_backtest.py                 # refetch bars -> overnight_trades.csv
 python analyze.py                            # recompute -> dashboard/public/data/backtest.json
@@ -33,7 +33,7 @@ whatever the latest run found — including if the verdict flips.
 ## Local dev
 
 ```bash
-cd ~/overnight/dashboard
+cd ~/Documents/538/_personal/code/crypto-scanner/dashboard
 npm install
 npm run dev
 ```
